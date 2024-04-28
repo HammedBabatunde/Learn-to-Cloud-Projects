@@ -26,7 +26,7 @@ if [ ! -f "$file" ]; then
 fi
 
 # Upload the file to Azure Blob Storage
-upload_command="az storage blob upload --file '$file' --container-name '$container' --account-name '$storage_account'  --output none | pv -p -s $(stat -c "%s" "$file") >/dev/null"
+upload_command="az storage blob upload --file '$file' --container-name '$container' --account-name '$storage_account'  --auth-mode login  --output none | pv -p -s $(stat -c "%s" "$file") >/dev/null"
 
 # Add optional arguments if provided
 if [ ! -z "$cloud_directory" ]; then
@@ -51,7 +51,7 @@ fi
 
 # Generate and display shareable link if container and storage account are provided
 if [ $# -ge 3 ]; then
-    link=$(az storage blob url --container-name "$container" --account-name "$storage_account" --name "$(basename "$file")" --output tsv)
+    link=$(az storage blob url --container-name "$container" --account-name "$storage_account" --name "$(basename "$file")"  --auth-mode login --output tsv)
     echo "Shareable link for '$file': $link"
 fi
 
