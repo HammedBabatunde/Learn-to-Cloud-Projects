@@ -26,7 +26,7 @@ if [ ! -f "$file" ]; then
 fi
 
 # Upload the file to Azure Blob Storage
-upload_command="az storage blob upload --file '$file' --container-name '$container' --account-name '$storage_account'  --auth-mode login  --output none | pv -p -s $(stat -c "%s" "$file") >/dev/null"
+upload_command="az storage blob upload --file '$file' --container-name '$container' --account-name '$storage_account'  --auth-mode login  --output none"
 
 # Add optional arguments if provided
 if [ ! -z "$cloud_directory" ]; then
@@ -42,7 +42,7 @@ echo "Uploading file '$file' to Azure Blob Storage container '$container'..."
 eval "$upload_command"
 
 
-if [ $? -eq 64 ]; then
+if [ $? -eq 0 ]; then
     echo "File uploaded successfully to Azure Blob Storage container '$container'."
 else
     echo "Failed to upload file to Azure Blob Storage container."
